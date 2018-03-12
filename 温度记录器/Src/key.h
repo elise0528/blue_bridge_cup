@@ -1,6 +1,8 @@
 #ifndef __KEY_H
 #define __KEY_H
 
+#include "delay.h"
+
 unsigned char keyscan()
 {
   unsigned char keyvalue=0;
