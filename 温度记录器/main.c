@@ -14,7 +14,6 @@ u16 time_count=0;
 u8 time_set;
 
 
-
 void main()
 {
 	buzz_com(0);
