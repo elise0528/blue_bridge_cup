@@ -155,8 +155,9 @@ void main()
 			while(key_set == 2)
 			{
 				key = keyscan();
-				if (key < 10 && ++set_count <= 4)
+				if (key < 10 && set_count <= 4)
 				{
+					set_count++;
 					switch (set_count)
 					{
 						case 1: disbuf[6] = key; maxwendu_set = key*10; break;
