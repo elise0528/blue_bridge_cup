@@ -1,8 +1,8 @@
 /*
-����û��׼ȷֵ���� �ж�ʱ������ ==
-������ʱע�ⷵ��ֵ
-�¶Ȳɼ�Ϊ10����
-��ʱ������һ�����0xff Ӧ��u16 ��ʱ����ʼ���ǵ� EA=1 ET0=1
+对于没有准确值的数 判断时最好不要用 ==
+做键盘时注意返回值
+温度采集为10进制
+定时器计数一般大于0xff 应用u16 定时器初始化记的 EA=1 ET0=1
 */
 
 
@@ -19,11 +19,11 @@ u8 table[12]= {0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90,0xff,0xbf};
 u8 disbuf[8]= {10,10,10,10,10,10,10,10};
 u8 discom=0;
 
-u16 time_count=0,led_flash_time=0;		//	��ס��ʱ����ļ�������0xff Ҫ��u16
+u16 time_count=0,led_flash_time=0;		//	记住定时器里的计数大于0xff 要用u16
 u8 led_flag=0xff,led_flash=0;
 u8 key_set=0;
 u8 key,set_count=0;
-u8 maxwendu=30,minwendu=20,wendu,maxwendu_set,minwendu_set;			// ��ȡ���¶�Ϊ10����
+u8 maxwendu=30,minwendu=20,wendu,maxwendu_set,minwendu_set;			// 读取的温度为10进制
 
 
 void display()
@@ -73,14 +73,14 @@ void led_com(u8 com)
 }
 
 
-void Timer0Init(void)		//1����@11.0592MHz
+void Timer0Init(void)		//1毫秒@11.0592MHz
 {
-	AUXR |= 0x80;		//��ʱ��ʱ��1Tģʽ
-	TMOD &= 0xF0;		//���ö�ʱ��ģʽ
-	TL0 = 0xCD;		//���ö�ʱ��ֵ
-	TH0 = 0xD4;		//���ö�ʱ��ֵ
-	TF0 = 0;		//���TF0��־
-	TR0 = 1;		//��ʱ��0��ʼ��ʱ
+	AUXR |= 0x80;		//定时器时钟1T模式
+	TMOD &= 0xF0;		//设置定时器模式
+	TL0 = 0xCD;		//设置定时初值
+	TH0 = 0xD4;		//设置定时初值
+	TF0 = 0;		//清除TF0标志
+	TR0 = 1;		//定时器0开始计时
 	
 	EA = 1;
 	ET0 = 1;
@@ -216,7 +216,7 @@ void time0() interrupt 1
 	if(key_set == 1)
 	{
 
-		if(++time_count >= led_flash_time) 		// >= ��ֹ�¶ȱ仯ʱ�趨��led�Ƶ���˸ʱ��ı� ������ܷ� 
+		if(++time_count >= led_flash_time) 		// >= 防止温度变化时设定的led灯的闪烁时间改变 引起的跑飞 
 		{
 			led_flag = (~led_flag)|0xfe;
 			led_flash = 1;
