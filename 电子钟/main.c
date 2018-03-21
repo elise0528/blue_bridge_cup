@@ -12,7 +12,7 @@ u8 tab[13] = {0xc0, 0xf9, 0xa4, 0xb0, 0x99, 0x92, 0x82, 0xf8, 0x80, 0x90, 0xff, 
 u8 disbuf[8] = {10, 10, 10, 10, 10, 10, 10, 10};
 u8 discom = 0;
 
-bit alarm_flag = 0,key_flag=0;
+bit alarm_flag = 0, key_flag = 0;
 u8 key, key_s7, key_s6, key_s5, _key_s;
 
 
@@ -130,7 +130,7 @@ void main()
 
         if((P33 != 1))
         {
-            key=4;
+            key = 4;
             Delay10ms();
             while (P33 != 1)
             {
@@ -341,7 +341,7 @@ void time0() interrupt 1
         time_count = 0;
         smg_flash_flag = ~smg_flash_flag;
     }
-	}
+}
 
 
 void time1() interrupt 3
@@ -359,7 +359,7 @@ void time1() interrupt 3
         {
             led_count = 0;
             led_flash = (~led_flash) | 0xfe;
-            if ((led_flash_count <= 25)||(!key_flag))
+            if ((led_flash_count <= 25) || (!key_flag))
             {
 
                 led_flash_count++;
@@ -367,7 +367,7 @@ void time1() interrupt 3
             }
             else
             {
-							key_flag=0;
+                key_flag = 0;
                 alarm_flag = 0;
                 led_com(0xff);
             }

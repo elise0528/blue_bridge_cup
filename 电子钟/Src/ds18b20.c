@@ -79,7 +79,7 @@ unsigned char Temper_Read()
 	Write_DS18B20(0x44);   //开始转换指令
 	Delay_OneWire(200);	   //延时一段时间
 
-  Ds18b20_Init();		   //DS18B20初始化
+  	Ds18b20_Init();		   //DS18B20初始化
 	Write_DS18B20(0xcc);   //跳过ROM的字节命令
 	Write_DS18B20(0xbe);   //读取指令
 	
