@@ -238,7 +238,7 @@ void main()
             {
                 nex_stat = ZD_MS;
                 shidu_l = 0;
-                shidu_h=0
+                shidu_h=0;
                 
                 key_s7 = 0;
             }
