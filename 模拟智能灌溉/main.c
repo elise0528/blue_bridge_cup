@@ -15,7 +15,7 @@ u8 disbuf[8] = {10, 10, 10, 10, 10, 10, 10, 10};
 u8 discom;
 
 u8 cur_stat, nex_stat, devices_chage, key;
-bit key_s7, key_s6, key_s5, key_s4, shidu_chage;
+bit key_s7, key_s6, key_s5, key_s4, shidu_h,shidu_l;
 bit buzz_stat, relay_stat, led_stat, at24c02_stat, buzz_set;
 u8 hour, second;
 u8 shidu, shidu_set = 40;
@@ -73,14 +73,14 @@ void devices_com(bit com_b, bit com_r)
 
 
 
-void Timer0Init(void)       //2ºÁÃë@11.0592MHz
+void Timer0Init(void)       //2ï¿½ï¿½ï¿½ï¿½@11.0592MHz
 {
-    AUXR |= 0x80;       //¶¨Ê±Æ÷Ê±ÖÓ1TÄ£Ê½
-    TMOD &= 0xF0;       //ÉèÖÃ¶¨Ê±Æ÷Ä£Ê½
-    TL0 = 0x9A;     //ÉèÖÃ¶¨Ê±³õÖµ
-    TH0 = 0xA9;     //ÉèÖÃ¶¨Ê±³õÖµ
-    TF0 = 0;        //Çå³ýTF0±êÖ¾
-    TR0 = 1;        //¶¨Ê±Æ÷0¿ªÊ¼¼ÆÊ±
+    AUXR |= 0x80;       //ï¿½ï¿½Ê±ï¿½ï¿½Ê±ï¿½ï¿½1TÄ£Ê½
+    TMOD &= 0xF0;       //ï¿½ï¿½ï¿½Ã¶ï¿½Ê±ï¿½ï¿½Ä£Ê½
+    TL0 = 0x9A;     //ï¿½ï¿½ï¿½Ã¶ï¿½Ê±ï¿½ï¿½Öµ
+    TH0 = 0xA9;     //ï¿½ï¿½ï¿½Ã¶ï¿½Ê±ï¿½ï¿½Öµ
+    TF0 = 0;        //ï¿½ï¿½ï¿½TF0ï¿½ï¿½Ö¾
+    TR0 = 1;        //ï¿½ï¿½Ê±ï¿½ï¿½0ï¿½ï¿½Ê¼ï¿½ï¿½Ê±
     EA = 1;
     ET0 = 1;
 }
@@ -110,18 +110,18 @@ void zd_func()
     }
 
 
-    if(shidu < shidu_set && !shidu_chage)
+    if(shidu < shidu_set && !shidu_l)
     {
         devices_chage = 1;
-        shidu_chage = 1;
-        buzz_stat = 1;
+        shidu_l = 1;
+        shidu_h=0;
         relay_stat = 1;
     }
-    if (shidu >= shidu_set && shidu_chage)
+    if (shidu >= shidu_set && !shidu_h)
     {
         devices_chage = 1;
-        shidu_chage = 0;
-        buzz_stat = 0;
+        shidu_l = 0;
+        shidu_h=1;
         relay_stat = 0;
     }
 
@@ -153,16 +153,18 @@ void sd_func()
     led_com(0xfd);
 
 
-    if(shidu < shidu_set && !shidu_chage)
+    if(shidu < shidu_set && !shidu_l)
     {
         devices_chage = 1;
-        shidu_chage = 1;
+        shidu_l = 1;
+        shidu_h=0;
         buzz_stat = 1;
     }
-    if (shidu >= shidu_set && shidu_chage)
+    if (shidu >= shidu_set && !shidu_h)
     {
         devices_chage = 1;
-        shidu_chage = 0;
+        shidu_l = 0;
+        shidu_h=1
         buzz_stat = 0;
     }
 
@@ -212,8 +214,8 @@ void main()
             if(key_s7)
             {
                 nex_stat = SD_MS;
-                shidu_chage = 0;
-                shidu_chage = 0;
+                shidu_l = 0;
+                shidu_l = 0;
                 key_s7 = 0;
             }
             if (key_s6)
@@ -235,7 +237,9 @@ void main()
             if (key_s7)
             {
                 nex_stat = ZD_MS;
-                devices_chage = 0;
+                shidu_l = 0;
+                shidu_h=0
+                
                 key_s7 = 0;
             }
             if (key_s6)
