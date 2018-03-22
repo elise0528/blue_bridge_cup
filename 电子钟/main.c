@@ -31,11 +31,11 @@ u16 time_count;
 void led_com(u8 com)
 {
 
-    P2 = ((P & 0x1f) | 0x80);
+    P2 = ((P2 & 0x1f) | 0x80);
     P0 = 0xff;
     P2 &= 0x1f;
 
-    P2 = ((P & 0x1f) | 0x80);
+    P2 = ((P2 & 0x1f) | 0x80);
     P0 = com;
     P2 &= 0x1f;
 

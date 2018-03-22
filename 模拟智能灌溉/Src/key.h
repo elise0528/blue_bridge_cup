@@ -1,8 +1,7 @@
-#ifndef __KEY_H_
-#define __KEY_H_
+#ifndef  __KEY_H_
+#define  __KEY_H_
 
 #include <STC15F2K60S2.H>
-
 
 void Delay10ms()		//@11.0592MHz
 {
@@ -16,9 +15,6 @@ void Delay10ms()		//@11.0592MHz
     }
     while (--i);
 }
-
-
-
 
 u8 keyscan()
 {
@@ -48,14 +44,14 @@ u8 keyscan()
                 break;
             }
         }
-        Delay10ms();
         while(temp != 0x0f)
         {
-            P3 &= 0x1f;
+            P3 &= 0x0f;
             temp = P3;
         }
     }
     return key;
 }
+
 
 #endif
