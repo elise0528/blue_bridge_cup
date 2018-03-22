@@ -87,14 +87,14 @@ void Timer0Init(void)       //2毫秒@11.0592MHz
     ET0 = 1;
 }
 
-void Timer1Init(void)		//2毫秒@11.0592MHz
+void Timer1Init(void)       //2毫秒@11.0592MHz
 {
-	AUXR |= 0x40;		//定时器时钟1T模式
-	TMOD &= 0x0F;		//设置定时器模式
-	TL1 = 0x9A;		//设置定时初值
-	TH1 = 0xA9;		//设置定时初值
-	TF1 = 0;		//清除TF1标志
-	TR1 = 1;		//定时器1开始计时
+    AUXR |= 0x40;       //定时器时钟1T模式
+    TMOD &= 0x0F;       //设置定时器模式
+    TL1 = 0x9A;     //设置定时初值
+    TH1 = 0xA9;     //设置定时初值
+    TF1 = 0;        //清除TF1标志
+    TR1 = 1;        //定时器1开始计时
     EA = 1;
     ET1 = 1;
 }
@@ -105,6 +105,9 @@ void zd_func()
     second = Ds1302_Single_Byte_Read(0x83);
     hour = Ds1302_Single_Byte_Read(0x85);
     shidu = pcf8591_read() * 100 / 255;
+    if (shidu > 99) {
+        shidu = 99;
+    }
 
     disbuf[7] = hour / 16;
     disbuf[6] = hour % 16;
@@ -147,6 +150,9 @@ void sd_func()
     second = Ds1302_Single_Byte_Read(0x83);
     hour = Ds1302_Single_Byte_Read(0x85);
     shidu = pcf8591_read() * 100 / 255;
+    if (shidu > 99) {
+        shidu = 99;
+    }
 
     disbuf[7] = hour / 16;
     disbuf[6] = hour % 16;
