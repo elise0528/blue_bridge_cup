@@ -166,6 +166,9 @@ void main()
                 chushui = 0;
                 key_s7 = 0;
             }
+			if(key_s6){
+				key_s6 = 0;
+			}
             break;
         default:
             break;
