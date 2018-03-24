@@ -1,6 +1,6 @@
 /*
-ledÉÁË¸Í£Ö¹Î´½â¾ö ÒÑ½â¾ö do{....}while(....);
-ÐÞ¸Ä ÓÃ×´Ì¬»úÍê³É
+ledé—ªçƒåœæ­¢æœªè§£å†³ å·²è§£å†³ do{....}while(....);
+ä¿®æ”¹ ç”¨çŠ¶æ€æœºå®Œæˆ
 */
 
 #include "key.h"
@@ -8,14 +8,14 @@ ledÉÁË¸Í£Ö¹Î´½â¾ö ÒÑ½â¾ö do{....}while(....);
 #include "ds18b20.h"
 
 
-#define SZ_XS_MS (u8) 0     //Ê±ÖÓÏÔÊ¾Ä£Ê½
-#define SZ_S_MS (u8) 1      //ÉèÖÃÐ¡Ê±Ä£Ê½
-#define SZ_F_MS (u8) 2      //ÉèÖÃ·ÖÖÓÄ£Ê½
-#define SZ_M_MS (u8) 3      //ÉèÖÃÃëÖÓÄ£Ê½
-#define NZ_S_MS (u8) 4      //ÄÖÖÓÉèÖÃÐ¡Ê±Ä£Ê½
-#define NZ_F_MS (u8) 5      //ÄÖÖÓÉèÖÃ·ÖÖÓÄ£Ê½
-#define NZ_M_MS (u8) 6      //ÄÖÖÓÉèÖÃÐ¡Ê±Ä£Ê½
-#define WD_XS_MS (u8) 7     //ÎÂ¶ÈÏÔÊ¾Ä£Ê½
+#define SZ_XS_MS (u8) 0     //æ—¶é’Ÿæ˜¾ç¤ºæ¨¡å¼
+#define SZ_S_MS (u8) 1      //è®¾ç½®å°æ—¶æ¨¡å¼
+#define SZ_F_MS (u8) 2      //è®¾ç½®åˆ†é’Ÿæ¨¡å¼
+#define SZ_M_MS (u8) 3      //è®¾ç½®ç§’é’Ÿæ¨¡å¼
+#define NZ_S_MS (u8) 4      //é—¹é’Ÿè®¾ç½®å°æ—¶æ¨¡å¼
+#define NZ_F_MS (u8) 5      //é—¹é’Ÿè®¾ç½®åˆ†é’Ÿæ¨¡å¼
+#define NZ_M_MS (u8) 6      //é—¹é’Ÿè®¾ç½®å°æ—¶æ¨¡å¼
+#define WD_XS_MS (u8) 7     //æ¸©åº¦æ˜¾ç¤ºæ¨¡å¼
 
 
 u8 tab[13] = {0xc0, 0xf9, 0xa4, 0xb0, 0x99, 0x92, 0x82, 0xf8, 0x80, 0x90, 0xff, 0xbf, 0xc6};
@@ -54,11 +54,11 @@ void display()
     P0 = 0xff;
     P2 &= 0x1f;
 
-    P2 = ((P2 & 0x1f) | 0xc0);  //Î»Ñ¡
+    P2 = ((P2 & 0x1f) | 0xc0);  //ä½é€‰
     P0 = 0x80 >> discom;
     P2 &= 0x1f;
 
-    P2 = ((P2 & 0x1f) | 0xe0);  //¶ÎÑ¡
+    P2 = ((P2 & 0x1f) | 0xe0);  //æ®µé€‰
     P0 = tab[disbuf[discom]];
     P2 &= 0x1f;
 
@@ -69,33 +69,33 @@ void display()
     }
 }
 
-void Timer0Init(void)       //2ºÁÃë@11.0592MHz
+void Timer0Init(void)       //2æ¯«ç§’@11.0592MHz
 {
-    AUXR |= 0x80;       //¶¨Ê±Æ÷Ê±ÖÓ1TÄ£Ê½
-    TMOD &= 0xF0;       //ÉèÖÃ¶¨Ê±Æ÷Ä£Ê½
-    TL0 = 0x9A;     //ÉèÖÃ¶¨Ê±³õÖµ
-    TH0 = 0xA9;     //ÉèÖÃ¶¨Ê±³õÖµ
-    TF0 = 0;        //Çå³ýTF0±êÖ¾
-    TR0 = 1;        //¶¨Ê±Æ÷0¿ªÊ¼¼ÆÊ±
+    AUXR |= 0x80;       //å®šæ—¶å™¨æ—¶é’Ÿ1Tæ¨¡å¼
+    TMOD &= 0xF0;       //è®¾ç½®å®šæ—¶å™¨æ¨¡å¼
+    TL0 = 0x9A;     //è®¾ç½®å®šæ—¶åˆå€¼
+    TH0 = 0xA9;     //è®¾ç½®å®šæ—¶åˆå€¼
+    TF0 = 0;        //æ¸…é™¤TF0æ ‡å¿—
+    TR0 = 1;        //å®šæ—¶å™¨0å¼€å§‹è®¡æ—¶
 
     EA = 1;
     ET0 = 1;
 }
 
-void Timer1Init(void)       //2ºÁÃë@11.0592MHz
+void Timer1Init(void)       //2æ¯«ç§’@11.0592MHz
 {
-    AUXR |= 0x40;       //¶¨Ê±Æ÷Ê±ÖÓ1TÄ£Ê½
-    TMOD &= 0x0F;       //ÉèÖÃ¶¨Ê±Æ÷Ä£Ê½
-    TL1 = 0x9A;     //ÉèÖÃ¶¨Ê±³õÖµ
-    TH1 = 0xA9;     //ÉèÖÃ¶¨Ê±³õÖµ
-    TF1 = 0;        //Çå³ýTF1±êÖ¾
-    TR1 = 1;        //¶¨Ê±Æ÷1¿ªÊ¼¼ÆÊ±
+    AUXR |= 0x40;       //å®šæ—¶å™¨æ—¶é’Ÿ1Tæ¨¡å¼
+    TMOD &= 0x0F;       //è®¾ç½®å®šæ—¶å™¨æ¨¡å¼
+    TL1 = 0x9A;     //è®¾ç½®å®šæ—¶åˆå€¼
+    TH1 = 0xA9;     //è®¾ç½®å®šæ—¶åˆå€¼
+    TF1 = 0;        //æ¸…é™¤TF1æ ‡å¿—
+    TR1 = 1;        //å®šæ—¶å™¨1å¼€å§‹è®¡æ—¶
 
     EA = 1;
     ET1 = 1;
 }
 
-void stcinit()      //STC³õÊ¼»¯¹Ø±ÕbuzzºÍrelay£¬led
+void stcinit()      //STCåˆå§‹åŒ–å…³é—­buzzå’Œrelayï¼Œled
 {
     P0 = 0x00;
     P2 = 0xa0;
@@ -105,7 +105,7 @@ void stcinit()      //STC³õÊ¼»¯¹Ø±ÕbuzzºÍrelay£¬led
     P2 = 0x1f;
 }
 
-void sz_xs_func()       //Ê±ÖÓÏÔÊ¾´¦Àíº¯Êý
+void sz_xs_func()       //æ—¶é’Ÿæ˜¾ç¤ºå¤„ç†å‡½æ•°
 {
     do {
         hour = Ds1302_Single_Byte_Read(0x85);
@@ -140,7 +140,7 @@ void sz_xs_func()       //Ê±ÖÓÏÔÊ¾´¦Àíº¯Êý
     } while (alarm_stat);
 }
 
-void sz_s_func()        //Ê±ÖÓ-Ð¡Ê±ÉèÖÃÏÔÊ¾´¦Àíº¯Êý
+void sz_s_func()        //æ—¶é’Ÿ-å°æ—¶è®¾ç½®æ˜¾ç¤ºå¤„ç†å‡½æ•°
 {
 
     if (smg_flash_flag) {
@@ -156,7 +156,7 @@ void sz_s_func()        //Ê±ÖÓ-Ð¡Ê±ÉèÖÃÏÔÊ¾´¦Àíº¯Êý
     }
 }
 
-void sz_f_func()        //Ê±ÖÓ-·ÖÖÓÉèÖÃÏÔÊ¾´¦Àíº¯Êý
+void sz_f_func()        //æ—¶é’Ÿ-åˆ†é’Ÿè®¾ç½®æ˜¾ç¤ºå¤„ç†å‡½æ•°
 {
     if (smg_flash_flag) {
         disbuf[4] = 10;
@@ -171,7 +171,7 @@ void sz_f_func()        //Ê±ÖÓ-·ÖÖÓÉèÖÃÏÔÊ¾´¦Àíº¯Êý
     }
 }
 
-void sz_m_func()        //Ê±ÖÓ-ÃëÉèÖÃÏÔÊ¾´¦Àíº¯Êý
+void sz_m_func()        //æ—¶é’Ÿ-ç§’è®¾ç½®æ˜¾ç¤ºå¤„ç†å‡½æ•°
 {
     if (smg_flash_flag) {
         disbuf[1] = 10;
@@ -186,9 +186,9 @@ void sz_m_func()        //Ê±ÖÓ-ÃëÉèÖÃÏÔÊ¾´¦Àíº¯Êý
     }
 }
 
-void nz_s_func()        //ÄÖÖÓ-Ð¡Ê±ÉèÖÃÏÔÊ¾´¦Àíº¯Êý
+void nz_s_func()        //é—¹é’Ÿ-å°æ—¶è®¾ç½®æ˜¾ç¤ºå¤„ç†å‡½æ•°
 {
-    if(smg_flash_flag) {    //Ê±¼äÉèÖÃÏÂµÄ Ê±¼äÉÁË¸
+    if(smg_flash_flag) {    //æ—¶é—´è®¾ç½®ä¸‹çš„ æ—¶é—´é—ªçƒ
         disbuf[7] = 10;
         disbuf[6] = 10;
     } else {
@@ -201,9 +201,9 @@ void nz_s_func()        //ÄÖÖÓ-Ð¡Ê±ÉèÖÃÏÔÊ¾´¦Àíº¯Êý
     }
 }
 
-void nz_f_func()        //ÄÖÖÓ-·ÖÖÓÉèÖÃÏÔÊ¾´¦Àíº¯Êý
+void nz_f_func()        //é—¹é’Ÿ-åˆ†é’Ÿè®¾ç½®æ˜¾ç¤ºå¤„ç†å‡½æ•°
 {
-    if(smg_flash_flag) {    //Ê±¼äÉèÖÃÏÂµÄ Ê±¼äÉÁË¸
+    if(smg_flash_flag) {    //æ—¶é—´è®¾ç½®ä¸‹çš„ æ—¶é—´é—ªçƒ
 
         disbuf[4] = 10;
         disbuf[3] = 10;
@@ -217,9 +217,9 @@ void nz_f_func()        //ÄÖÖÓ-·ÖÖÓÉèÖÃÏÔÊ¾´¦Àíº¯Êý
     }
 }
 
-void nz_m_func()        //ÄÖÖÓ-ÃëÉèÖÃÏÔÊ¾´¦Àíº¯Êý
+void nz_m_func()        //é—¹é’Ÿ-ç§’è®¾ç½®æ˜¾ç¤ºå¤„ç†å‡½æ•°
 {
-    if(smg_flash_flag) {    //Ê±¼äÉèÖÃÏÂµÄ Ê±¼äÉÁË¸
+    if(smg_flash_flag) {    //æ—¶é—´è®¾ç½®ä¸‹çš„ æ—¶é—´é—ªçƒ
 
         disbuf[1] = 10;
         disbuf[0] = 10;
@@ -233,7 +233,7 @@ void nz_m_func()        //ÄÖÖÓ-ÃëÉèÖÃÏÔÊ¾´¦Àíº¯Êý
     }
 }
 
-void wd_xs_func()       //ÎÂ¶ÈÏÔÊ¾´¦Àíº¯Êý
+void wd_xs_func()       //æ¸©åº¦æ˜¾ç¤ºå¤„ç†å‡½æ•°
 {
     wendu = Temper_Read();
 
