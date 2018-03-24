@@ -5,17 +5,15 @@
 
 extern bit key_flag;
 
-void Delay10ms()		//@11.0592MHz
+void Delay10ms()        //@11.0592MHz
 {
     unsigned char i, j;
 
     i = 108;
     j = 145;
-    do
-    {
+    do {
         while (--j);
-    }
-    while (--i);
+    } while (--i);
 }
 
 
@@ -24,15 +22,12 @@ u8 keyscan()
     u8 temp, key = 99;
 
     temp = P3 & 0x0f;
-    if(temp != 0x0f)
-    {
-			key_flag=1;
+    if(temp != 0x0f) {
+        key_flag = 1;
         Delay10ms();
         temp = P3 & 0x0f;
-        if(temp != 0x0f)
-        {
-            switch (temp)
-            {
+        if(temp != 0x0f) {
+            switch (temp) {
             case 0x0e:
                 key = 7;
                 break;
@@ -49,9 +44,7 @@ u8 keyscan()
                 key = 99;
                 break;
             }
-
-            while(temp != 0x0f)
-            {
+            while(temp != 0x0f) {
                 temp = P3 & 0x0f;
             }
         }
