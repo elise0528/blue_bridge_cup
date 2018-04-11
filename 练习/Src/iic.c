@@ -1,11 +1,25 @@
 /*
-  ³ÌĞòËµÃ÷: IIC×ÜÏßÇı¶¯³ÌĞò
-  Èí¼ş»·¾³: Keil uVision 4.10 
-  Ó²¼ş»·¾³: CT107µ¥Æ¬»ú×ÛºÏÊµÑµÆ½Ì¨(12MHz)
-  ÈÕ    ÆÚ: 2011-8-9
+  ç¨‹åºè¯´æ˜: IICæ€»çº¿é©±åŠ¨ç¨‹åº
+  è½¯ä»¶ç¯å¢ƒ: Keil uVision 4.10 
+  ç¡¬ä»¶ç¯å¢ƒ: CT107å•ç‰‡æœºç»¼åˆå®è®­å¹³å° 8051ï¼Œ12MHz
+  æ—¥    æœŸ: 2011-8-9
 */
 
 #include "iic.h"
+
+#define somenop Delay5us()
+
+
+#define SlaveAddrW 0xA0
+#define SlaveAddrR 0xA1
+
+//æ€»çº¿å¼•è„šå®šä¹‰
+sbit SDA = P2^1;  /* æ•°æ®çº¿ */
+sbit SCL = P2^0;  /* æ—¶é’Ÿçº¿ */
+
+
+
+
 
 void Delay5us()		//@11.0592MHz
 {
@@ -17,7 +31,7 @@ void Delay5us()		//@11.0592MHz
 }
 
 
-//×ÜÏßÆô¶¯Ìõ¼ş
+//æ€»çº¿å¯åŠ¨æ¡ä»¶
 void IIC_Start(void)
 {
 	SDA = 1;
@@ -28,7 +42,7 @@ void IIC_Start(void)
 	SCL = 0;	
 }
 
-//×ÜÏßÍ£Ö¹Ìõ¼ş
+//æ€»çº¿åœæ­¢æ¡ä»¶
 void IIC_Stop(void)
 {
 	SDA = 0;
@@ -37,8 +51,8 @@ void IIC_Stop(void)
 	SDA = 1;
 }
 
-//Ó¦´ğÎ»¿ØÖÆ
-void IIC_Ack(unsigned char ackbit)
+//åº”ç­”ä½æ§åˆ¶
+void IIC_Ack(bit ackbit)
 {
 	if(ackbit) 
 	{	
@@ -56,7 +70,7 @@ void IIC_Ack(unsigned char ackbit)
 	somenop;
 }
 
-//µÈ´ıÓ¦´ğ
+//ç­‰å¾…åº”ç­”
 bit IIC_WaitAck(void)
 {
 	SDA = 1;
@@ -76,7 +90,7 @@ bit IIC_WaitAck(void)
 	}
 }
 
-//Í¨¹ıI2C×ÜÏß·¢ËÍÊı¾İ
+//é€šè¿‡I2Cæ€»çº¿å‘é€æ•°æ®
 void IIC_SendByte(unsigned char byt)
 {
 	unsigned char i;
@@ -98,7 +112,7 @@ void IIC_SendByte(unsigned char byt)
 	}
 }
 
-//´ÓI2C×ÜÏßÉÏ½ÓÊÕÊı¾İ
+//ä»I2Cæ€»çº¿ä¸Šæ¥æ”¶æ•°æ®
 unsigned char IIC_RecByte(void)
 {
 	unsigned char da;
@@ -117,17 +131,18 @@ unsigned char IIC_RecByte(void)
 	return da;
 }
 
-void pcf8591_Init(u8 com)
+void Pcf8591_Init(u8 com)
 {
 	IIC_Start();
 	IIC_SendByte(0x90);
 	IIC_WaitAck();
 	IIC_SendByte(com);
 	IIC_WaitAck();
-	IIC_Stop();	
+	IIC_Stop();
+
 }
 
-u8 pcf8591_read()
+u8 Pcf8951_Read()
 {
 	u8 temp;
 	IIC_Start();
@@ -135,19 +150,36 @@ u8 pcf8591_read()
 	IIC_WaitAck();
 	temp=IIC_RecByte();
 	IIC_Ack(0);
-	IIC_Stop();	
+	IIC_Stop();
 	return temp;
 }
 
-void at24c02_write(u8 addr,u8 dat)
+void At24c02_Write(u8 addr_a,u8 dat_a)
 {
+	IIC_Start();
+	IIC_SendByte(0xa0);
+	IIC_WaitAck();
+	IIC_SendByte(addr_a);
+	IIC_WaitAck();
+	IIC_SendByte(dat_a);
+	IIC_WaitAck();
+	IIC_Stop();
+}
+
+u8 At24c02_Read(u8 addr)
+{
+	u8 dat;
 	IIC_Start();
 	IIC_SendByte(0xa0);
 	IIC_WaitAck();
 	IIC_SendByte(addr);
 	IIC_WaitAck();
-	IIC_SendByte(dat);
+	
+	IIC_Start();
+	IIC_SendByte(0xa1);
 	IIC_WaitAck();
+	dat=IIC_RecByte();
+	IIC_Ack(0);
 	IIC_Stop();	
+	return dat;
 }
-
