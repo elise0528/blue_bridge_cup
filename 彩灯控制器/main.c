@@ -6,11 +6,8 @@ void main()
 {
 	StcInit();
 	
-	LedFlashSetTimeNew[0]=LedFlashSetTime[0]=ReadByte_AT24C02(0x00);
-	LedFlashSetTimeNew[1]=LedFlashSetTime[1]=ReadByte_AT24C02(0x01);
-	LedFlashSetTimeNew[2]=LedFlashSetTime[2]=ReadByte_AT24C02(0x02);
-	LedFlashSetTimeNew[3]=LedFlashSetTime[3]=ReadByte_AT24C02(0x03);
-	LedFlashSetTimeNew[4]=LedFlashSetTime[4]=ReadByte_AT24C02(0x04);
+
+	LedFlashSetTime[4]=ReadByte_AT24C02(0x04);
 	if(LedFlashSetTime[4]!=1)
 	{
 		u8 i;
@@ -18,6 +15,13 @@ void main()
         {
 			LedFlashSetTime[i]=4;
         }
+		WriteByte_AT24C02(0x04,0);
+	}else
+	{
+		LedFlashSetTimeNew[0]=LedFlashSetTime[0]=ReadByte_AT24C02(0x00);
+		LedFlashSetTimeNew[1]=LedFlashSetTime[1]=ReadByte_AT24C02(0x01);
+		LedFlashSetTimeNew[2]=LedFlashSetTime[2]=ReadByte_AT24C02(0x02);
+		LedFlashSetTimeNew[3]=LedFlashSetTime[3]=ReadByte_AT24C02(0x03);
 	}
 	
 	ADC_Init();
