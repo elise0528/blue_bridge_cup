@@ -102,7 +102,7 @@ void Timer1Init(void)       //2毫秒@11.0592MHz
 
 void zd_func()
 {
-    second = Ds1302_Single_Byte_Read(0x83);
+    minute = Ds1302_Single_Byte_Read(0x83);
     hour = Ds1302_Single_Byte_Read(0x85);
     shidu = pcf8591_read() * 100 / 255;
     if (shidu > 99) {
@@ -112,8 +112,8 @@ void zd_func()
     disbuf[7] = hour / 16;
     disbuf[6] = hour % 16;
     disbuf[5] = 11;
-    disbuf[4] = second / 16;
-    disbuf[3] = second % 16;
+    disbuf[4] = minute / 16;
+    disbuf[3] = minute % 16;
     disbuf[2] = 10;
     disbuf[1] = shidu / 10;
     disbuf[0] = shidu % 10;
